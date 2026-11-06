@@ -1,18 +1,18 @@
 # Alba & Mateo — espacio de boda
 
-Prototipo web adaptable para gestionar una boda. Abre `index.html` en un navegador moderno. Los datos de invitados, mesas e invitación se guardan en el almacenamiento local de ese navegador, así que el prototipo conserva los cambios en el mismo dispositivo.
+Web estática con HTML, CSS y JavaScript, publicada con GitHub Pages y conectada a Supabase.
 
-## Funcionalidad incluida
+## Archivos
 
-- Panel resumen con confirmaciones, pendientes y notas de alergias.
-- Alta y edición de invitados, estado de asistencia, acompañantes, mesa y alergias.
-- Filtros y exportación CSV de la lista.
-- Plano de mesas redondas o cuadradas, con aforo configurable y color de estado por invitado.
-- Editor de invitación con vista previa y acción para copiar el enlace.
-- Vista de roles con un súper administrador protegido visualmente y organizadores.
+- `index.html`, `styles.css`, `auth.css`, `app.js`: web, estilos, inicio de sesión y RSVP.
+- `supabase-config.js`: URL del proyecto y clave publishable (la clave publishable está diseñada para ser pública; la seguridad real la aplican Auth y RLS).
+- `supabase/schema.sql`: esquema inicial para crear tablas, roles, permisos y el endpoint seguro de RSVP.
+- `supabase/public-invitation-policy.sql`: permiso de lectura pública limitado a los detalles de la invitación.
 
-## Antes de publicar
+## Uso
 
-Esta versión es una maqueta funcional de frontend; todavía no tiene servidor ni autenticación. El panel de equipo es demostrativo y no inicia sesión ni envía invitaciones reales. El enlace copiado abre la web, pero las respuestas que se agreguen desde esta maqueta solo se guardan en el navegador que la usa y no se comparten con los organizadores.
+Abre la web desplegada para iniciar sesión como miembro. El súper administrador puede crear y editar fichas en Invitados; los organizadores pueden consultar la lista, asignar mesas y editar la invitación. Para invitar a una persona, usa el botón **Enlace** de su fila para copiar su URL personal de confirmación. La persona invitada responde desde ese enlace sin poder consultar el resto de la lista.
 
-Para que los invitados respondan desde sus móviles y que la familia comparta los datos, hace falta conectar un backend con base de datos y autenticación (por ejemplo, Supabase o Firebase), aplicar permisos en el servidor y desplegar la web en un dominio público. Allí se implementaría el rol propietario inmutable para el resto del equipo, los accesos de organizadores y el formulario público de RSVP. No se deben guardar contraseñas en esta página estática.
+## Seguridad
+
+No pongas contraseñas, `sb_secret_...` ni `service_role` en el frontend o en GitHub. No habilites acceso directo anónimo a invitados o mesas. Las tablas privadas usan Row Level Security; la respuesta pública se procesa con una función que solo actualiza la ficha asociada al token aleatorio de la invitación.
